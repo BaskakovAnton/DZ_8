@@ -54,22 +54,42 @@ def search_contact():
         if search in contact_lst[index_var]:
             print(contact_str)
 
+def copy_contact(source_file, destination_file):
+    try:
+        line_number = int(input('Введите номер строки для копирования: '))
+        with open(source_file, 'r', encoding='UTF-8') as source:
+            contacts_list = source.read().rstrip().split('\n\n')
+            if 1 <= line_number <= len(contacts_list):
+                contact_to_copy = contacts_list[line_number - 1]
+                with open(destination_file, 'a', encoding='UTF-8') as destination:
+                    destination.write(contact_to_copy + '\n\n')
+                print('Контакт успешно скопирован.')
+            else:
+                print('Некорректный номер строки.')
+    except ValueError:
+        print('Некорректный ввод. Введите целое число.')
+
 
 def interface():
-    with open('phonebook.txt', 'a', encoding='UTF-8'):
+    source_file = 'phonebook.txt'
+    destination_file = 'phonebook_copy.txt'
+
+    with open(source_file, 'a', encoding='UTF-8'):
         pass
+
     command = '-1'
-    while command != '4':
+    while command != '5':
         print('Возможные варианты меню: \n'
               '1. Добавить контакт\n'
               '2. Вывести на экран\n'
               '3. Поиск контакта\n'
-              '4. Выход из программы')
+              '4. Копировать контакт\n'
+              '5. Выход из программы')
 
         command = input('Введите номер команды: ')
 
-        while command not in ('1', '2', '3', '4'):
-            print('Неккоректные данные')
+        while command not in ('1', '2', '3', '4', '5'):
+            print('Некорректные данные')
             command = input('Введите номер команды: ')
 
         match command:
@@ -80,6 +100,8 @@ def interface():
             case '3':
                 search_contact()
             case '4':
+                copy_contact(source_file, destination_file)
+            case '5':
                 print('Всего хорошего')
 
 interface()
